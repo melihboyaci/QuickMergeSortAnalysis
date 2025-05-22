@@ -22,8 +22,8 @@ Bu projede, Merge Sort ve Quick Sort algoritmalarının farklı dizi boyutların
 Her boyut için 50 farklı rastgele dizi oluşturulmuş ve sıralama sürelerinin ortalaması alınmıştır.
 
 ## 📈 Grafikler
-![Zaman Karışılaştırması]("zaman_karsilastirma.png")
+![Zaman Karışılaştırması](zaman_karsilastirma.png)
 
-![C Katsayıları]("c_katsayilari.png")
+![C Katsayıları](c_katsayilari.png)
 
-![Tablo]("c_katsayilari_tablosu.png")
+![Tablo](c_katsayilari_tablosu.png)
