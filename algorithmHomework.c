@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
-
 // Fonksiyon prototipleri
 void MergeSort(int arr[], int left, int right);
 void Merge(int arr[], int left, int mid, int right);
@@ -14,10 +12,12 @@ int hoare_partition(int arr[], int low, int high);
 void generateRandomArray(int* arr, int size);
 double measureTime(void (*sortFunction)(int*, int, int), int* arr, int size);
 
-
 int main() {
+
+    // Rastgele sayı üreteci için başlangıç
     srand(time(NULL));
 
+    // Sonuçları yazmak için dosya açma
     FILE* fp = fopen("sonuclar.txt", "w");
     if (fp == NULL) {
         printf("Dosya açılamadı.\n");
@@ -26,14 +26,18 @@ int main() {
 
     fprintf(fp, "n,merge_time,c_merge,quick_time,c_quick\n");
     
+    // Dizi boyutları
     int sizes[6] = { 1000, 5000, 10000, 50000, 100000, 200000 };
+    
     for (int i = 0; i < 6; i++) {
         int size = sizes[i];
         double totalMergeTime = 0;
         double totalQuickTime = 0;
 
         for (int j = 0; j < 50; j++) {
-            int* originalArray = (int*)malloc(size * sizeof(int)); //Orijinal dizi
+            
+            // Orijinal dizi
+            int* originalArray = (int*)malloc(size * sizeof(int));
             generateRandomArray(originalArray, size);
 
             // Kopya diziyi oluştur
@@ -44,19 +48,27 @@ int main() {
                 copy2[k] = originalArray[k];
             }
 
+            // MergeSort ve QuickSort için zaman ölçümü
             totalMergeTime += measureTime(MergeSort, copy1, size);
-            totalQuickTime += measureTime(QuickSort, copy2, size);
+            totalQuickTime += measureTime(QuickSort, copy2, size); 
 
+            // Belleği temizle
             free(originalArray);
             free(copy1);
             free(copy2);
         }
         
-        double averageMergeTime = totalMergeTime / 50;
+        //MergeSort için ortalama süre
+        double averageMergeTime = totalMergeTime / 50; 
+        
+        //QuickSort için ortalama süre
         double averageQuickTime = totalQuickTime / 50;
-        double c_merge = averageMergeTime / (size * log2(size)); // averageMergeTime artık ms cinsinden
+        
+        // C sabitlerini hesapla
+        double c_merge = averageMergeTime / (size * log2(size));
         double c_quick = averageQuickTime / (size * log2(size));
-
+        
+        // Sonuçları ekrana yazdır
         printf("Array size: %d\n", size);
         printf("Average Merge Sort time: %.10f saniye\n", averageMergeTime);
         printf("C_merge: %.10f\n", c_merge);
@@ -64,8 +76,15 @@ int main() {
         printf("C_quick: %.10f\n", c_quick);
 
         // Dosyaya yazdır
-        fprintf(fp, "%d,%.10f,%.10f,%.10f,%.10f\n", size, averageMergeTime, c_merge, averageQuickTime, c_quick);
+        fprintf(fp, "%d,%.10f,%.10f,%.10f,%.10f\n", 
+            size, 
+            averageMergeTime, 
+            c_merge, 
+            averageQuickTime, 
+            c_quick
+        );
     }
+    
     fclose(fp);
     printf("Sonuçlar sonuclar.txt dosyasına yazıldı.\n");
     return 0;
@@ -135,7 +154,7 @@ void QuickSort(int arr[], int low, int high) {
 }
 
 int hoare_partition(int arr[], int low, int high) {
-    int pivot = arr[low]; // pivot olarak ilk eleman
+    int pivot = arr[low]; 
     int i = low - 1;
     int j = high + 1;
 
@@ -157,12 +176,14 @@ int hoare_partition(int arr[], int low, int high) {
     }
 }
 
+// Rastgele dizi oluşturma fonksiyonu
 void generateRandomArray(int* arr, int size) {
     for (int i = 0; i < size; i++) {
         arr[i] = rand() % 1000000; // 0-999999 arasında rastgele sayılar
     }
 }
 
+// Zaman ölçme fonksiyonu
 double measureTime(void (*sortFunction)(int*, int, int), int* arr, int size) {
     clock_t start = clock();
     sortFunction(arr, 0, size - 1);
